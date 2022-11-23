@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,22 +47,25 @@ namespace Exercise_linked_list
             if (listEmpty())
                 Console.WriteLine("\nList is empty");
             else
-                Console.WriteLine("\nRecords in the list are:\n");
-            Node currentNode;
-            currentNode = LAST.next;
-            while (currentNode != LAST)
             {
-                Console.Write(currentNode.rollNumber + "    " +
-                currentNode.name + "\n");
-                currentNode = currentNode.next;
+                Console.WriteLine("\nRecords in the list are:\n");
+                Node currentNode;
+                currentNode = LAST.next;
+                while (currentNode != LAST)
+                {
+                    Console.Write(currentNode.rollNumber + "    " +
+                    currentNode.name + "\n");
+                    currentNode = currentNode.next;
+                }
+                Console.Write(LAST.rollNumber + "    " + LAST.name + "\n");
             }
-            Console.Write(LAST.rollNumber + "    " + LAST.name + "\n");
         }
-    }
-    internal class Program
-    {
-        static void Main(string[] args)
+        public void firstNode()
         {
+            if (listEmpty())
+                Console.WriteLine("\nList is empty");
+            else
+                Console.WriteLine("\nThe first record in the list is:\n\n" + LAST.next.rollNumber + "    " + LAST.next.name); 
         }
     }
 }

@@ -109,6 +109,11 @@ namespace Exercise_linked_list
                                 }
                             }
                             break;
+                        case '3':
+                            {
+                                obj.firstNode();
+                            }
+                            break;
                     }
                 }
             }

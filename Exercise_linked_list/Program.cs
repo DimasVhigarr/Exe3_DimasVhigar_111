@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Exercise_linked_list
         public int rollNumber;
         public string name;
         public Node next;
+        public Node prev;
     }
     class CircularList
     {
@@ -22,7 +24,74 @@ namespace Exercise_linked_list
         {
             LAST = null;
         }
+        public void addNode()
+        {
+            int rollNo ;
+            string nm;
+            Console.WriteLine("\nEnter the roll number of the student: ");
+            rollNo = Convert.ToInt32(Console.ReadLine());
+            Console.Write("\nEnter the name of the student: ");
+            nm = Console.ReadLine();
+            Node newnode = new Node();
+            newnode.rollNumber = rollNo;
+            newnode.name = nm;
+            /*check if the list is empty*/
+            if (LAST == null || rollNo <= LAST.rollNumber)
+            {
+                if ((LAST != null) && (rollNo == LAST.rollNumber))
+                {
+                    Console.WriteLine("\nDuplicate roll numbers not allowed");
+                }
+                newnode.next = LAST;
+                if (LAST != null)
+                    LAST.prev = newnode;
+                newnode.prev = null;
+                LAST = newnode;
+                return;
+            }
+            Node previous, current;
+            for (current = previous = LAST; current != null && rollNo >= current.rollNumber; previous = current, current = current.next)
+            {
+                if (rollNo == current.rollNumber)
+                {
+                    Console.WriteLine("\nDuplicate roll numbers not allowed");
+                    return;
+                }
+            }
+            newnode.next = current;
+            newnode.prev = previous;
 
+            if (current == null)
+            {
+                newnode.next = null;
+                previous.next = newnode;
+                return;
+            }
+            current.prev = newnode;
+            previous.next = newnode;
+        }
+        public bool delNode(int rollNo)
+        {
+            Node previous, current;
+            previous = current = null;
+            if (Search(rollNo, ref previous, ref current) == false)
+                return false;
+            if (current == LAST)
+            {
+                LAST = LAST.next;
+                if (LAST != null)
+                    LAST.prev = null;
+                return true;
+            }
+            if (current.next == null)
+            {
+                previous.next = null;
+                return true;
+            }
+            previous.next = current.next;
+            current.next.prev = previous;
+            return true;
+        }
         public bool Search(int rollNo, ref Node previous, ref Node current)/*search for the specified node*/
         {
             for (previous = current = LAST.next; current != LAST; previous = current, current = current.next)
@@ -75,20 +144,43 @@ namespace Exercise_linked_list
                 try
                 {
                     Console.WriteLine("\nMenu");
-                    Console.WriteLine("1. View all the records in the list");
-                    Console.WriteLine("2. Search for a record in the list");
-                    Console.WriteLine("3. Display the first record in the list");
-                    Console.WriteLine("4. Exit");
-                    Console.WriteLine("\nEnter your choice (1-4): ");
+                    Console.WriteLine("1. Add a record to the list");
+                    Console.WriteLine("2. Delete a record to the list");
+                    Console.WriteLine("3. View all the records in the list");
+                    Console.WriteLine("4. Search for a record in the list");
+                    Console.WriteLine("5. Display the first record in the list");
+                    Console.WriteLine("6. Exit");
+                    Console.WriteLine("\nEnter your choice (1-6): ");
                     char ch = Convert.ToChar(Console.ReadLine());
                     switch (ch)
                     {
                         case '1':
                             {
-                                obj.traverse();
+                                obj.addNode();
                             }
                             break;
                         case '2':
+                            {
+                                if (obj.listEmpty())
+                                {
+                                    Console.WriteLine("\nList is Empty");
+                                    break;
+                                }
+                                Console.Write("\nEnter the roll number of the student" + "whose record is to be deleted: ");
+                                int rollNo = Convert.ToInt32(Console.ReadLine());
+                                Console.WriteLine();
+                                if (obj.delNode(rollNo) == false)
+                                    Console.WriteLine("Record not found");
+                                else
+                                    Console.WriteLine(" Record with roll number" + rollNo + " deleted \n ");
+                            }
+                            break;
+                        case '3':
+                            {
+                                obj.traverse();
+                            }
+                            break;
+                        case '4':
                             {
                                 if (obj.listEmpty() == true)
                                 {
@@ -109,12 +201,12 @@ namespace Exercise_linked_list
                                 }
                             }
                             break;
-                        case '3':
+                        case '5':
                             {
                                 obj.firstNode();
                             }
                             break;
-                        case '4':
+                        case '6':
                             return;
                         default:
                             {

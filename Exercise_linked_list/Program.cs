@@ -94,15 +94,9 @@ namespace Exercise_linked_list
         }
         public bool Search(int rollNo, ref Node previous, ref Node current)/*search for the specified node*/
         {
-            for (previous = current = LAST.next; current != LAST; previous = current, current = current.next)
-            {
-                if (rollNo == current.rollNumber)
-                    return (true);/*return true if the node is found*/
-            }
-            if (rollNo == LAST.rollNumber)/* if the node is present at the end*/
-                return true;
-            else
-                return (false);/* return false if the node is not found*/
+            for (previous = current = LAST; current != null && rollNo != current.rollNumber; previous = current, current = current.next)
+            { }
+            return (current != null);
         }
         public bool listEmpty()
         {
